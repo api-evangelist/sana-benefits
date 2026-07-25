@@ -1,0 +1,235 @@
+aid: sana-benefits
+name: Sana Benefits
+review:
+  question: Does Sana Benefits expose a public, self-serve developer portal or API?
+  answer: false
+  date: '2026-07-25'
+  reviewer: API Evangelist
+  homeMarket: United States
+  tier: benefits-admin
+  gated: true
+findings:
+  summary: |
+    Sana Benefits publishes no public API surface of any kind. Every
+    conventional developer-portal host and path was probed on 2026-07-25 and
+    none exists: developer.sanabenefits.com, developers.sanabenefits.com,
+    docs.sanabenefits.com and api.sanabenefits.com all fail to resolve (curl
+    exit 000, no DNS), while /developers, /api, /developer, /partners and
+    /integrations on www.sanabenefits.com all return HTTP 404. The full Yoast
+    page sitemap (67 URLs) contains no developer, API, docs or integrations
+    page — the site is a WordPress marketing property covering employers,
+    brokers, providers, plans, guides, case studies and ten state landing
+    pages, with nothing technical.
+
+    The only machine-readable host is secure.sanabenefits.com, the member /
+    employer / broker application. It answers HTTP 200 with
+    application/json for the SPA shell (bundleName "LoginApp") and redirects
+    unknown paths to /login. Probing it for specs returns an explicit auth
+    wall: /openapi.json and /swagger.json both return HTTP 401 with
+    {"error":{"message":"Login required","code":"login_required"}}, and
+    /api/v1/openapi.json returns the same. This is an internal application
+    API behind session login, not a developer product. Under the review
+    criteria this is category (b), a partner/agent login wall, so gated is
+    true and no developer portal URL is recorded as confirmed.
+
+    No OpenAPI, Swagger, AsyncAPI, GraphQL SDL, .proto or Postman artifact
+    was found, so the openapi/ directory is intentionally absent from this
+    repo. /graphql on the secure host returns the login SPA shell rather
+    than a GraphQL response, and no introspection was attempted against a
+    gated endpoint. There is no GitHub organization: api.github.com/orgs
+    returns 404 for both "sanabenefits" and "sana-benefits".
+  developerPortal:
+    exists: false
+    url: ''
+    confirmed: false
+    classification: none — no developer portal, no partner developer login wall, no marketing "innovation" page
+    probes:
+      - url: https://developer.sanabenefits.com
+        status: '000'
+        note: does not resolve (no DNS)
+      - url: https://developers.sanabenefits.com
+        status: '000'
+        note: does not resolve (no DNS)
+      - url: https://docs.sanabenefits.com
+        status: '000'
+        note: does not resolve (no DNS)
+      - url: https://api.sanabenefits.com
+        status: '000'
+        note: does not resolve (no DNS)
+      - url: https://www.sanabenefits.com/developers
+        status: '404'
+      - url: https://www.sanabenefits.com/api
+        status: '404'
+      - url: https://www.sanabenefits.com/developer
+        status: '404'
+      - url: https://www.sanabenefits.com/partners
+        status: '404'
+        note: the real partners page is /sana-partners/ (200) and lists clinical service partners, not technology or API partners
+      - url: https://www.sanabenefits.com/integrations
+        status: '404'
+      - url: https://www.sanabenefits.com/
+        status: '200'
+        note: WordPress marketing site, title "Small Business Health Insurance | Sana Benefits"
+      - url: https://secure.sanabenefits.com/
+        status: '200'
+        note: JSON application shell, bundleName "LoginApp" — member/employer/broker login wall
+      - url: https://help.sanabenefits.com/hc/en-us
+        status: '403'
+        note: Zendesk help center, blocks automated fetch; member support content, not developer docs
+  specHarvest:
+    openapiHarvested: false
+    specsCount: 0
+    directoryOmitted: true
+    probes:
+      - url: https://www.sanabenefits.com/openapi.json
+        status: '404'
+      - url: https://www.sanabenefits.com/swagger.json
+        status: '404'
+      - url: https://www.sanabenefits.com/api-docs
+        status: '404'
+      - url: https://secure.sanabenefits.com/openapi.json
+        status: '401'
+        body: '{"error":{"message":"Login required","code":"login_required"}}'
+      - url: https://secure.sanabenefits.com/swagger.json
+        status: '401'
+        body: '{"error":{"message":"Login required","code":"login_required"}}'
+      - url: https://secure.sanabenefits.com/api/v1/openapi.json
+        status: '401'
+        body: '{"error":{"message":"Login required","code":"login_required"}}'
+      - url: https://secure.sanabenefits.com/api-docs
+        status: '200'
+        note: redirects to /login and returns the LoginApp JSON shell, not a spec
+      - url: https://secure.sanabenefits.com/docs
+        status: '200'
+        note: redirects to /login and returns the LoginApp JSON shell, not a spec
+      - url: https://secure.sanabenefits.com/redoc
+        status: '200'
+        note: redirects to /login and returns the LoginApp JSON shell, not a spec
+  acord:
+    posture: no ACORD reference found
+    evidence: |
+      A word-boundary scan for ACORD, AL3, ACORD XML, NGDS, IVANS, "agency
+      download", Applied Epic, Vertafore and AMS360 across the homepage,
+      /sana-partners/, /brokers/, /employers/, /what-we-do/, /broker-faq/,
+      /employer-faqs/ and /healthcare-providers/ returned zero matches.
+      Sana is a health-benefits carrier rather than a P&C carrier, so ACORD
+      is not the native standard for its line of business — but the health
+      equivalents are equally absent: no reference to X12 834 benefit
+      enrollment, X12 837/835 claims, EDI, SFTP file exchange, HRIS or
+      payroll integrations (Gusto, Rippling, Justworks), or SSO appears in
+      any public page. The single "payroll" hit is an FAQ answer clarifying
+      that Sana is not a PEO and does not take over payroll.
+  insuranceVerbs:
+    quote:
+      exposedAsAPI: false
+      note: quoting is a human broker workflow — /get-quote/ and /broker-get-quote/ web forms, with the broker page promising "Get rates in 48 hours. No medical questionnaires needed."
+    bind:
+      exposedAsAPI: false
+      note: binding runs through the assigned broker and the Sana sales team; no programmatic surface
+    issue:
+      exposedAsAPI: false
+      note: policy issuance and enrollment happen inside the login-walled employer dashboard at secure.sanabenefits.com
+    fnol:
+      exposedAsAPI: false
+      note: no claims or FNOL API; claims are administered by Sana and surfaced to members in the portal and via the Sana Care care team
+    audience: partner-only — broker-mediated distribution plus member/employer self-service inside an authenticated portal
+  authModel:
+    scheme: session login (email/password) to secure.sanabenefits.com
+    publicOAuth: false
+    oidcDiscovery:
+      url: https://secure.sanabenefits.com/.well-known/openid-configuration
+      status: '200'
+      note: not OIDC metadata — the host returns the LoginApp JSON shell for this path
+    oauthAuthorizationServer:
+      url: https://secure.sanabenefits.com/.well-known/oauth-authorization-server
+      status: '200'
+      note: not OAuth metadata — the host returns the LoginApp JSON shell for this path
+    apiKeys: false
+    mtls: false
+  webhooks:
+    documented: false
+    asyncapi: false
+    note: no event catalog, webhook documentation or AsyncAPI artifact is published; absence is the finding
+  postman:
+    publicCollection: false
+    publicWorkspace: false
+  graphql:
+    publicEndpoint: false
+    note: https://secure.sanabenefits.com/graphql returns the login SPA shell; no public GraphQL surface, no SDL harvested
+  grpc:
+    publishedProtos: false
+  sourceCode:
+    githubOrganization: false
+    note: api.github.com/orgs/sanabenefits and /orgs/sana-benefits both return HTTP 404
+  transports:
+    - protocol: HTTPS (web)
+      documented: true
+      note: WordPress marketing site at www.sanabenefits.com
+    - protocol: REST/JSON (internal application API)
+      scheme: https
+      baseURL: https://secure.sanabenefits.com
+      documented: false
+      note: powers the member/employer/broker dashboards; returns 401 login_required to anonymous callers, undocumented publicly
+    - protocol: GraphQL
+      documented: false
+    - protocol: WebSocket
+      documented: false
+    - protocol: gRPC
+      documented: false
+    - protocol: ACORD/AL3 or X12 EDI
+      documented: false
+      note: no standards-based exchange surface is described publicly
+  marketContext: |
+    The United States has no federal insurance regulator and no
+    open-insurance mandate; insurance is regulated state by state under NAIC
+    model laws, so nothing compels a carrier or benefits administrator to
+    publish an API. Sana's posture is exactly what that seam predicts: value
+    is delivered through brokers and an authenticated portal, and the
+    technology story in its marketing ("technology-driven approach to
+    benefits", "easy-to-use portal") is a UX claim rather than an
+    integration claim. Recording the absence accurately is the finding.
+sources:
+  - url: https://www.sanabenefits.com/
+    type: Website
+    status: '200'
+    fetched: '2026-07-25'
+    note: homepage — level-funded plans, Sana Care virtual primary care, broker/employer/member segmentation
+  - url: https://www.sanabenefits.com/who-we-are/
+    type: About
+    status: '200'
+    fetched: '2026-07-25'
+    note: founded 2017, Austin TX, $107M raised, 160+ employees fully remote, 30,000+ members
+  - url: https://www.sanabenefits.com/brokers/
+    type: Documentation
+    status: '200'
+    fetched: '2026-07-25'
+    note: broker distribution page — "Get rates in 48 hours"; no API or integration content
+  - url: https://www.sanabenefits.com/sana-partners/
+    type: Documentation
+    status: '200'
+    fetched: '2026-07-25'
+    note: partners are clinical service vendors (virtual primary/pediatric/mental health, labs, second opinions), not technology integrations
+  - url: https://www.sanabenefits.com/solutions/level-funded-health-plans/
+    type: Documentation
+    status: '200'
+    fetched: '2026-07-25'
+    note: level-funded structure with stop-loss included, reference-based pricing off the Medicare fee schedule, Edison Healthcare centers of excellence
+  - url: https://www.sanabenefits.com/page-sitemap.xml
+    type: Sitemap
+    status: '200'
+    fetched: '2026-07-25'
+    note: 67 pages, none developer- or API-related; ten state landing pages (TX, AZ, IL, IN, KY, OH, OK, VA, WI, AL) all return 200
+  - url: https://secure.sanabenefits.com/
+    type: SignIn
+    status: '200'
+    fetched: '2026-07-25'
+    note: authenticated application host; anonymous spec paths return 401 login_required
+actions:
+  apisYmlCreated: true
+  apisListed: 0
+  openapiDirectory: omitted — nothing real to save
+  reason: |
+    Identity-only bootstrap. Sana Benefits has no public self-serve API, so
+    apis[] is intentionally empty and no openapi/ directory was created. The
+    honest record of a partner-gated, broker-mediated benefits carrier with
+    zero public API surface is the deliverable.
