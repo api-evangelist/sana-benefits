@@ -43,6 +43,8 @@ modified: '2026-07-25'
 specificationVersion: '0.19'
 apis: []
 common:
+- type: DomainSecurity
+  url: security/sana-benefits-domain-security.yml
 - type: Website
   url: https://www.sanabenefits.com/
 - type: About
@@ -69,6 +71,28 @@ common:
   url: https://www.linkedin.com/company/sana-benefits/
 - type: Twitter
   url: https://twitter.com/sanabenefits
+- type: Login
+  url: https://secure.sanabenefits.com/
+- type: Plans
+  url: https://www.sanabenefits.com/plans/
+- type: FAQ
+  url: https://www.sanabenefits.com/employer-faqs/
+- type: Guides
+  url: https://www.sanabenefits.com/guides/
+- type: Testimonials
+  url: https://www.sanabenefits.com/testimonials/
+- type: Careers
+  url: https://www.sanabenefits.com/careers/
+- type: Privacy
+  url: https://www.sanabenefits.com/notice-of-privacy-practices/
+- type: Compliance
+  url: https://www.sanabenefits.com/notice-of-privacy-practices/
+- type: Conformance
+  url: conformance/sana-benefits-conformance.yml
+- type: Packages
+  url: packages/sana-benefits-packages.yml
+- type: LLMsTxt
+  url: llms/sana-benefits-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

@@ -1,0 +1,46 @@
+generated: '2026-07-25'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.sanabenefits.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  5 04:45:32 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  note: WordPress marketing site
+- host: secure.sanabenefits.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 27 14:32:34 2026 GMT
+  cert_subject: CN=sanabenefits.com
+  cert_issuer: Google Trust Services (WE1)
+  hsts: false
+  server: cloudflare
+  note: >-
+    Login-walled Rails application host serving the member/employer/broker
+    dashboards. Probed manually on 2026-07-25 (it is not an apis.yml baseURL, so
+    the automated sweep did not reach it). No Strict-Transport-Security header is
+    returned on the HTTP/2 200 response — a real gap on the host that carries
+    authenticated PHI-adjacent sessions.
+- host: help.sanabenefits.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 25 23:43:24 2026 GMT
+  cert_subject: CN=help.sanabenefits.com
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  note: Zendesk help center; returns 302 to the hosted help center and 403 to automated fetches
+domains:
+- domain: sanabenefits.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine
+  dmarc_record: 'v=DMARC1; p=quarantine; pct=10; rua=mailto:8b5dad9de7d6.a@dmarcinput.com; ruf=mailto:8b5dad9de7d6.f@dmarcinput.com; sp=none; fo=1'
+  dmarc_note: >-
+    p=quarantine but pct=10 — only 10% of failing mail is quarantined — and
+    sp=none leaves subdomains unprotected. Partial enforcement, not full.
+  caa_note: No CAA record is published, so any CA may issue for this domain.

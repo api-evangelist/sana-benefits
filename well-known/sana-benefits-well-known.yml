@@ -1,0 +1,67 @@
+generated: '2026-07-25'
+method: searched
+source: live probes of Sana Benefits hosts
+note: >-
+  Probed the standard /.well-known/ discovery surface across every Sana Benefits
+  host known to the catalog. Nothing real was found. The marketing host
+  (www.sanabenefits.com, WordPress) returns 404 with the site HTML for every
+  path. The application host (secure.sanabenefits.com, a Ruby on Rails SPA
+  backend) answers HTTP 200 to every /.well-known/ path, but the body is the
+  same catch-all LoginApp JSON shell
+  ({"session":{...},"bundleName":"LoginApp","currentUser":null,...}) rather than
+  a discovery document — a 200 here is a routing artifact, not a published
+  document, so it is recorded as `served: login-app-shell` and NOT counted as a
+  hit. No WellKnown, SecurityTxt, OpenIDConnect or OAuthScopes pointer is
+  emitted, because no such document exists.
+hosts:
+- host: https://www.sanabenefits.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /llms.txt, status: 404}
+  - {path: /robots.txt, status: 200, note: 'WordPress default; sitemap at https://sanabenefits.com/wp-sitemap.xml'}
+- host: https://sanabenefits.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+- host: https://secure.sanabenefits.com
+  documents:
+  - {path: /.well-known/security.txt, status: 200, served: login-app-shell, hit: false}
+  - {path: /.well-known/oauth-authorization-server, status: 200, served: login-app-shell, hit: false}
+  - {path: /.well-known/oauth-protected-resource, status: 200, served: login-app-shell, hit: false}
+  - {path: /.well-known/openid-configuration, status: 200, served: login-app-shell, hit: false}
+  - {path: /llms.txt, status: 200, served: login-app-shell, hit: false}
+- host: https://api.sanabenefits.com
+  documents:
+  - {path: /openapi.json, status: '000', note: host does not resolve (no DNS)}
+contract_discovery:
+  note: >-
+    Re-ran the full contract-discovery sweep (REST spec at the API host root,
+    GraphQL introspection, MCP tools/list) on 2026-07-25 on top of the original
+    bootstrap review. Every probe missed. Sana Benefits publishes no
+    machine-readable API contract.
+  probes:
+  - {url: 'https://secure.sanabenefits.com/openapi.json', status: 401, body: '{"error":{"message":"Login required","code":"login_required"}}'}
+  - {url: 'https://secure.sanabenefits.com/api/openapi.json', status: 401, body: '{"error":{"message":"Login required","code":"login_required"}}'}
+  - {url: 'https://secure.sanabenefits.com/v1/openapi.json', status: 401, body: '{"error":{"message":"Login required","code":"login_required"}}'}
+  - {url: 'https://secure.sanabenefits.com/api/v1/swagger.json', status: 401, body: '{"error":{"message":"Login required","code":"login_required"}}'}
+  - {url: 'https://api.sanabenefits.com/openapi.json', status: '000', note: no DNS}
+  - url: 'https://secure.sanabenefits.com/graphql'
+    method: POST
+    status: 404
+    note: >-
+      Introspection query {__schema{queryType{name}}} returns the Rails default
+      404 HTML page ("The page you were looking for doesn't exist"), confirming
+      there is no GraphQL route on the application host. No SDL harvested.
+  - {url: 'https://mcp.sanabenefits.com', status: '000', note: no DNS; no hosted MCP server published}
+  mcp_tools_list: not attempted — no MCP server host exists to POST tools/list against
+registries:
+  note: >-
+    npm, PyPI, RubyGems, crates.io and GitHub were searched for first-party Sana
+    Benefits packages or source. github.com/SanaBenefits exists as an EMPTY user
+    account (type User, 0 public repos, no name/company/blog, created
+    2020-11-10) and github.com/sanacare as an empty Organization (0 public
+    repos) — neither is a confirmed, populated first-party org, so no
+    GitHubOrganization pointer is emitted.

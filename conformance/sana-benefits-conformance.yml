@@ -1,0 +1,150 @@
+generated: '2026-07-25'
+method: searched
+source: >-
+  https://www.sanabenefits.com/notice-of-privacy-practices/,
+  https://www.sanabenefits.com/privacy-policy/,
+  https://www.sanabenefits.com/consent-to-telehealth/,
+  https://www.sanabenefits.com/broker-faq/,
+  https://www.sanabenefits.com/employer-faqs/, plus the live host probes in
+  security/sana-benefits-domain-security.yml and
+  well-known/sana-benefits-well-known.yml
+note: >-
+  Sana Benefits is a US health-benefits company selling level-funded and
+  self-funded small-group plans, paired with Sana Care (Sana Member Services FL,
+  P.A.) for virtual-first primary care. Its published conformance surface is
+  therefore REGULATORY, not technical: a HIPAA Notice of Privacy Practices and a
+  telehealth consent, with no API standards of any kind. Nothing here is
+  inferred from a specification, because Sana publishes none — every `conforms`
+  value below is either backed by a cited public page or explicitly marked
+  undetermined. Absence is the finding.
+standards:
+- id: hipaa-privacy-rule
+  conforms: true
+  evidence: >-
+    A HIPAA Notice of Privacy Practices is published at
+    https://www.sanabenefits.com/notice-of-privacy-practices/ ("THIS NOTICE
+    DESCRIBES HOW MEDICAL INFORMATION ABOUT YOU MAY BE USED AND DISCLOSED..."),
+    covering the records of care generated or received by Sana Member Services
+    FL, P.A. and affiliated professional corporations, and naming the HHS Office
+    for Civil Rights as the complaint channel — the notice a covered entity is
+    required to publish under 45 CFR 164.520.
+- id: hipaa-business-associate-agreement
+  conforms: true
+  evidence: >-
+    https://www.sanabenefits.com/privacy-policy/ states that protected health
+    information disclosed by insurance providers and the employer to the company
+    is governed by a separate business associate agreement, and is excluded from
+    the scope of the general web privacy policy.
+- id: telehealth-informed-consent
+  conforms: true
+  evidence: >-
+    https://www.sanabenefits.com/consent-to-telehealth/ (200) publishes the
+    consent-to-telehealth terms for Sana Care virtual visits.
+- id: hipaa-security-rule
+  conforms: null
+  evidence: >-
+    Undetermined. Sana operates as a health plan and telehealth provider and is
+    therefore in scope, but publishes no security page, trust center, or
+    safeguards statement — trust.sanabenefits.com, security.sanabenefits.com,
+    /security/ and /compliance/ all miss (see
+    security/sana-benefits-trust-center probes). No public claim to assert
+    against.
+- id: x12-834-benefit-enrollment
+  conforms: null
+  evidence: >-
+    Undetermined. HIPAA transaction standards oblige health plans to accept the
+    ANSI X12N 834 enrollment transaction, and Sana necessarily exchanges
+    enrollment with employers and brokers, but no public page, FAQ, or broker
+    guide mentions 834, EDI, SFTP file feeds, or HRIS/payroll integrations. A
+    word-boundary scan across the homepage, /brokers/, /employers/,
+    /sana-partners/, /broker-faq/, /employer-faqs/ and /healthcare-providers/
+    returned zero matches; the only payroll mention is an FAQ clarifying that
+    Sana is not a PEO. Any 834 exchange is private and undocumented.
+- id: x12-837-835-claims
+  conforms: null
+  evidence: >-
+    Undetermined, same basis as 834 — Sana administers claims and pays providers
+    off a reference-based percentage of the Medicare fee schedule, but publishes
+    no claims-exchange documentation of any kind.
+- id: fhir-r4
+  conforms: false
+  evidence: >-
+    No FHIR endpoint, capability statement, or Patient Access API is published.
+    The CMS Interoperability and Patient Access rule binds CMS-regulated payers
+    (Medicare Advantage, Medicaid/CHIP managed care, ACA exchange QHPs); Sana's
+    line of business is employer-sponsored level-funded and self-funded ERISA
+    group coverage, which that rule does not reach — so there is no mandate
+    behind a FHIR surface here, and none exists.
+- id: acord-al3
+  conforms: false
+  evidence: >-
+    No ACORD, AL3, ACORD XML, NGDS, IVANS, agency-download, Applied Epic,
+    Vertafore or AMS360 reference appears on any public page. ACORD is the
+    property-and-casualty standards family; Sana is a health-benefits carrier,
+    so it is not the native standard for this line of business.
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document exists. /openapi.json, /swagger.json,
+    /v1/openapi.json and /api/v1/swagger.json on secure.sanabenefits.com all
+    return HTTP 401 login_required; the same paths on www.sanabenefits.com
+    return 404; api.sanabenefits.com does not resolve.
+- id: asyncapi
+  conforms: false
+  evidence: No AsyncAPI document, event catalog, or webhook documentation is published.
+- id: graphql
+  conforms: false
+  evidence: >-
+    POST of an introspection query to https://secure.sanabenefits.com/graphql
+    returns the Rails default 404 page — there is no GraphQL route.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No public OAuth 2.0 authorization server. Access to
+    secure.sanabenefits.com is by email/password session login;
+    /.well-known/oauth-authorization-server and
+    /.well-known/oauth-protected-resource return the LoginApp JSON shell rather
+    than RFC 8414 / RFC 9728 metadata.
+- id: openid-connect
+  conforms: false
+  evidence: >-
+    /.well-known/openid-configuration returns the LoginApp JSON shell, not OIDC
+    discovery metadata. No public SSO or identity federation is documented.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    The application host's anonymous error envelope is a bespoke shape —
+    {"error":{"message":"Login required","code":"login_required"}} with
+    Content-Type application/json, not application/problem+json.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt returns 404 on www.sanabenefits.com and the
+    LoginApp shell on secure.sanabenefits.com. No published security contact or
+    disclosure policy.
+- id: tls-1-3
+  conforms: true
+  evidence: >-
+    Both www.sanabenefits.com and secure.sanabenefits.com negotiate TLSv1.3 with
+    a valid Google Trust Services certificate; see
+    security/sana-benefits-domain-security.yml.
+- id: soc-2
+  conforms: null
+  evidence: >-
+    Undetermined — no SOC 2 report, ISO 27001 certificate, HITRUST
+    certification, or trust center is published on any Sana host.
+- id: scim
+  conforms: false
+  evidence: No SCIM 2.0 provisioning endpoints or user-provisioning documentation.
+compliance_program:
+  published: true
+  kind: regulatory-notice
+  url: https://www.sanabenefits.com/notice-of-privacy-practices/
+  regimes: [HIPAA]
+  certifications: []
+  note: >-
+    Sana publishes the HIPAA-mandated Notice of Privacy Practices and a
+    telehealth consent. It publishes NO third-party attestations (no SOC 2, ISO
+    27001, HITRUST, PCI DSS or FedRAMP) and operates no trust center. The
+    `Compliance` pointer in apis.yml resolves to the Notice of Privacy
+    Practices, which is the whole of the published compliance posture.

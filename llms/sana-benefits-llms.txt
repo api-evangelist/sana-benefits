@@ -1,0 +1,63 @@
+# Sana Benefits
+
+> Sana Benefits is an Austin, Texas health benefits company founded in 2017 that sells level-funded and self-funded small-group health plans to small and midsize US employers, bundling medical, dental and vision coverage with Sana Care, its in-house virtual-first primary care and care navigation service. Sana distributes almost entirely through licensed benefits brokers, underwrites and administers the plan itself with stop-loss insurance included, and prices provider claims off a reference-based percentage of the Medicare fee schedule.
+
+**There is no public Sana Benefits API.** As of 2026-07-25 Sana publishes no developer portal, no API reference, no OpenAPI/Swagger document, no GraphQL schema, no AsyncAPI or webhook catalog, no MCP server, no SDKs and no Postman collection. The `developer.`, `developers.`, `docs.` and `api.` subdomains do not resolve; `/developers`, `/api`, `/developer`, `/partners` and `/integrations` on www.sanabenefits.com all return 404. The only machine surface is `secure.sanabenefits.com`, a login-walled Ruby on Rails application serving the member, employer and broker dashboards — its `/openapi.json` and `/swagger.json` paths answer `401 {"error":{"message":"Login required","code":"login_required"}}`, confirming an internal-only API. If you are an agent looking for a way to quote, bind, enroll or file a claim programmatically with Sana, that path does not exist: quoting is a human broker workflow ("rates in 48 hours" from a web form) and enrollment happens inside the authenticated employer dashboard.
+
+## Company
+
+- [Sana Benefits](https://www.sanabenefits.com/): Small-business health insurance — level-funded and self-funded plans plus Sana Care virtual primary care.
+- [Who we are](https://www.sanabenefits.com/who-we-are/): Founded 2017, Austin TX, fully remote.
+- [What we do](https://www.sanabenefits.com/what-we-do/): The plan model and the Sana Care service.
+- [Careers](https://www.sanabenefits.com/careers/)
+- [News & press](https://www.sanabenefits.com/press/)
+- [Contact](https://www.sanabenefits.com/contact/)
+
+## Products and plans
+
+- [Plans](https://www.sanabenefits.com/plans/): Plan comparison and cost-sharing.
+- [Level-funded health plans](https://www.sanabenefits.com/solutions/level-funded-health-plans/): Level-funded structure with stop-loss included, reference-based pricing off the Medicare fee schedule.
+- [Self-funded health plans](https://www.sanabenefits.com/solutions/self-funded-health-plans/)
+- [Solutions](https://www.sanabenefits.com/solutions/)
+- [Sana Care / SanaMD](https://www.sanabenefits.com/sanamd/): Virtual-first primary care.
+- [Partners](https://www.sanabenefits.com/sana-partners/): Clinical service partners (virtual primary/pediatric/mental health, labs, second opinions) — not technology or API partners.
+
+## Audiences
+
+- [Employers](https://www.sanabenefits.com/employers/) · [Employer FAQ](https://www.sanabenefits.com/employer-faqs/)
+- [Brokers](https://www.sanabenefits.com/brokers/) · [Broker FAQ](https://www.sanabenefits.com/broker-faq/) · [Broker quote request](https://www.sanabenefits.com/broker-get-quote/)
+- [Healthcare providers](https://www.sanabenefits.com/healthcare-providers/) · [Join the provider network](https://www.sanabenefits.com/healthcare-providers/join/)
+- [Get a quote](https://www.sanabenefits.com/get-quote/): The entry point. A web form, not an API.
+- [Sign in](https://secure.sanabenefits.com/): Member / employer / broker portal.
+- [Help center](https://help.sanabenefits.com/hc/en-us): Zendesk member support, not developer docs.
+
+## Content
+
+- [Blog](https://www.sanabenefits.com/blog/) ([RSS](https://www.sanabenefits.com/feed/))
+- [Guides](https://www.sanabenefits.com/guides/): Buyer-education content on small-business health plans.
+- [Testimonials](https://www.sanabenefits.com/testimonials/) and case studies (PCS Software, Two Roads Wellness Clinic, Roost Austin, Long Center, Creative Civilization, Hitch, Village Tech Schools).
+
+## Legal, privacy and compliance
+
+- [Notice of Privacy Practices](https://www.sanabenefits.com/notice-of-privacy-practices/): The HIPAA-mandated notice for Sana Care (Sana Member Services FL, P.A.). This is the whole of Sana's published compliance posture — there is no SOC 2, ISO 27001, HITRUST or trust center.
+- [Privacy policy](https://www.sanabenefits.com/privacy-policy/) · [Cookie policy](https://www.sanabenefits.com/cookie-policy/)
+- [Terms of service](https://www.sanabenefits.com/terms-of-service/)
+- [Consent to telehealth](https://www.sanabenefits.com/consent-to-telehealth/)
+- [Mobile app privacy policy](https://www.sanabenefits.com/mobile-app-privacy-policy/) · [Mobile app terms of use](https://www.sanabenefits.com/mobile-app-terms-of-use/)
+
+## API Evangelist artifacts
+
+These are the artifacts the API Evangelist network holds for Sana Benefits. Most of them record an absence, which is the point.
+
+- [apis.yml](https://raw.githubusercontent.com/api-evangelist/sana-benefits/refs/heads/main/apis.yml): The APIs.json index for this provider. `apis[]` is empty — there is no API to list.
+- [review.yml](https://raw.githubusercontent.com/api-evangelist/sana-benefits/refs/heads/main/review.yml): The full developer-surface review, with every probe and status code.
+- [conformance/sana-benefits-conformance.yml](https://raw.githubusercontent.com/api-evangelist/sana-benefits/refs/heads/main/conformance/sana-benefits-conformance.yml): Standards posture — HIPAA privacy rule yes; OpenAPI, GraphQL, AsyncAPI, OAuth 2.0, OIDC, FHIR, SCIM, ACORD/AL3 and RFC 9457 all no; X12 834/837/835 undetermined.
+- [security/sana-benefits-domain-security.yml](https://raw.githubusercontent.com/api-evangelist/sana-benefits/refs/heads/main/security/sana-benefits-domain-security.yml): TLS 1.3 on all hosts; HSTS present on www and help but absent on the authenticated `secure` host; no DNSSEC, no CAA, SPF present, DMARC at p=quarantine pct=10.
+- [well-known/sana-benefits-well-known.yml](https://raw.githubusercontent.com/api-evangelist/sana-benefits/refs/heads/main/well-known/sana-benefits-well-known.yml): Every `/.well-known/` probe and the full contract-discovery sweep. Note that `secure.sanabenefits.com` returns HTTP 200 to any `/.well-known/` path with a catch-all `LoginApp` JSON shell — a routing artifact, not a discovery document.
+- [packages/sana-benefits-packages.yml](https://raw.githubusercontent.com/api-evangelist/sana-benefits/refs/heads/main/packages/sana-benefits-packages.yml): Registry sweep — no first-party SDK, CLI or package anywhere.
+
+## Market context
+
+The United States has no federal insurance regulator and no open-insurance mandate; insurance is regulated state by state under NAIC model laws, so nothing compels a benefits carrier or administrator to publish an API. Sana's posture is exactly what that seam predicts: value is delivered through brokers and an authenticated portal, and the technology story in its marketing ("technology-driven approach to benefits", "easy-to-use portal") is a UX claim rather than an integration claim. Sana sells in Texas, Arizona, Illinois, Indiana, Kentucky, Ohio, Oklahoma, Virginia, Wisconsin and Alabama.
+
+Generated by the API Evangelist enrichment pipeline, 2026-07-25. Method: generated from apis.yml, review.yml and the repo artifacts (no provider-published llms.txt exists — https://www.sanabenefits.com/llms.txt returns 404).

@@ -1,0 +1,17 @@
+generated: '2026-07-25'
+method: none
+source: >-
+  Searched npm (registry search for "sana-benefits" and "sanabenefits"), PyPI
+  (/pypi/sana-benefits/json 404, /pypi/sanabenefits/json 404), RubyGems
+  (sana-benefits 404), crates.io, and every public Sana Benefits web property
+  (www.sanabenefits.com sitemap of 67 pages, /brokers/, /employers/,
+  /sana-partners/, /broker-faq/, /employer-faqs/). No first-party Sana Benefits
+  client SDK, CLI, or package exists on any public registry.
+notes: >-
+  Sana Benefits ships no public API, therefore no client libraries. Its only
+  machine surface is the login-walled Rails application at
+  secure.sanabenefits.com, consumed by its own first-party web and mobile
+  clients. github.com/SanaBenefits is an empty personal account (0 public repos)
+  and github.com/sanacare an empty organization (0 public repos); neither
+  publishes source. No SDKs pointer is emitted.
+packages: []
