@@ -26,6 +26,17 @@ description: >-
   broker-mediated benefits carrier with zero public self-serve API surface,
   which is the typical posture for the US benefits-admin tier in a market with
   no open-insurance mandate.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Insurance
